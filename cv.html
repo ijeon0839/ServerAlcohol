@@ -1,0 +1,56 @@
+		function loadJSON(){
+		$.getJSON("https://data.cityofnewyork.us/resource/d9fw-zp4j.json", function(results){
+			data = results;	
+			});
+		}
+
+
+		function search(){
+			var build = "";
+			
+			var name = document.getElementById("name");
+			var output = document.getElementById("output");
+			var cardTemplate = document.getElementById("cardTemplate").innerHTML;
+	
+			for(var index = 0; index < data.length; index++){
+				try{
+					if(data[index].Name.toUpperCase().indexOf(name.value.toUpperCase()) != -1){
+						build += Mustache.render(cardTemplate, data[index]);
+					}
+				}
+				catch(err){
+					console.log("error");
+				}
+			}
+			output.innerHTML = build;
+		}
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+		<script type = "text/template" id = "cardTemplate">
+			<div class = 'card'>
+				<h1> {{company_name}} </h1>
+				<p> {{address}}</p><hr>
+				<p> {{phone}} </p><hr>
+				Location: <a href='https://www.google.com/maps/search/ + {{address}} + /"'>{{company_name}}</a><hr>
+				<a href="https://{{website}}/">{{website}}</a>
+			</div>
+		</script>
+		
+		
+		<body onload="loadJSON()">
+		<center><div class="searchButton">	
+			<input type="text" id="name" placeholder="  Name of Restaurant" size="45">
+			<button onclick="search()" id="searchButton">SEARCH</button>
+		</div></center>
+		<br><br><br>
+		<div id="output">
+			<center><div class = "restaurant">
+				<h1> NAME OF RESTAURANT </h1>
+				<p>Address</p><hr>
+				<p> Phone Number </p><hr>
+				<p> Location </p><hr>
+				<p> Website </p>
+			</div></center>
+		</div>
+	</body>
